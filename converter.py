@@ -19,7 +19,7 @@ def main():
             error_window(3)
 
         if Path(f'./{file2}.').is_file():
-            error_window(5)
+            error_window(4)
 
         if check_extension(file1) and check_extension(file2):
             window(file1, file2, check_extension(file1), check_extension(file2))
@@ -123,15 +123,12 @@ def error_window(error_id):
         case 3:
             error_message = "Error 3: File not found"
             error_description = "Make sure you opened the program in the right path."
-            error_example = "The path should contain both files"
+            error_example = ""
         case 4:
-            error_message = "Error 4: test"
-            error_description = "Make sure you opened the program in the right path."
-            error_example = "The path should contain both files"
-        case 5:
             error_message = "Error 4: File exists"
-            error_description = "Make sure you opened the program in the right path."
-            error_example = "The path should contain both files"
+            error_description = "File you wanted to create already exsists"
+            error_example = "Make sure to delete it before attempting to convert"
+
         case _:
             error_message = "An unknown error occured"
             error_description = "No description available."
