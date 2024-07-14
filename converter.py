@@ -22,7 +22,7 @@ def clicked():
 def window(file1, file2):
     app = QApplication(sys.argv)
     win = QMainWindow()
-    win.setGeometry(800, 400, 500, 225)
+    win.setGeometry(800, 400, 500, 250)
     win.setWindowTitle("File converter")
 
     label1 = QtWidgets.QLabel(win)
@@ -41,7 +41,7 @@ def window(file1, file2):
     file2_label.adjustSize()
 
     b1 = QtWidgets.QPushButton(win)
-    b1.move(300, 100)
+    b1.move(50, 200)
     b1.setText("Convert")
     b1.clicked.connect(clicked)
 
