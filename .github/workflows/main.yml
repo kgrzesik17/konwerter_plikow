@@ -1,0 +1,53 @@
+name: Konwerter plików
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  schedule:
+    - cron:  '0 10 * * 5'
+  label:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up python 3.11
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.11"
+    - name: Build using Powershell
+      run: |
+        .\install_resources.ps1
+    - name: Dodaj utworzony plik do repozytorium
+      uses: actions/upload-artifact@v4.3.4
+      with:
+        name: Executable
+        path: .\dist\converter.exe
+        if-no-files-found: warn
+        overwrite: true
+    - name: Struktura plików dla .exe
+      run: |
+        mkdir -Force artefacts
+        $filePath = ".\build\converter.exe
+        if (Test-Path -Path $filePath){
+          Remove-Item -Force $filePath
+        }
+        Move-Item .\dist\converter.exe $filePath
+        git add $filePath
+    - name: Commit do repo
+      uses: stefanzweifel/git-auto-commit-action@v5.0.1
+      with:
+        commit_message: Automatyczne dodanie nowej wersji pliku .exe
+        branch: main
+        commit_options: '--no-verify --signoff'
+        commit_author: Author <actions@github.com>
+        status_options: '--untracked-files=no'
+        skip_dirty_check: true
