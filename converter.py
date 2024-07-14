@@ -2,11 +2,17 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from functools import partial
 import sys
+from pathlib import Path
 
 def main():
     try:
         file1 = sys.argv[1]
         file2 = sys.argv[2]
+
+        if Path(f'./{file1}.').is_file() and Path(f'./{file2}.').is_file():
+            print('ss')
+        else:
+            error_window(3)
 
         if check_extension(file1) and check_extension(file2):
             window(file1, file2, check_extension(file1), check_extension(file2))
@@ -29,8 +35,12 @@ def check_extension(file):
     return False
 
 
-def convert(file1):
-    print(file1)
+def convert(file1, file2, file1_extension, file2_extension):
+    print(f'Nastepuje proba przekonwertowania pliku {file1} na plik {file2}')
+    print(f'rozszerzenie 1: {file1_extension}, rozszerzenie 2: {file2_extension}')
+
+    if file1_extension == ".xml":
+        pass
 
 
 def window(file1, file2, file1_extension, file2_extension):
@@ -57,7 +67,7 @@ def window(file1, file2, file1_extension, file2_extension):
     b1 = QtWidgets.QPushButton(win)
     b1.move(300, 100)
     b1.setText("Convert")
-    b1.clicked.connect(partial(convert, file1))
+    b1.clicked.connect(partial(convert, file1, file2, file1_extension, file2_extension))
 
     win.show()
     sys.exit(app.exec_())
@@ -78,6 +88,10 @@ def error_window(error_id):
             error_message = "Error 2: Extension not supported"
             error_description = "You can only pass files that match the supported extensions"
             error_example = "Supported extensions: .xml, .json, .yml, .yaml"
+        case 3:
+            error_message = "Error 3: File not found"
+            error_description = "Make sure you opened the program in the right path."
+            error_example = "The path should contain both files"
         case _:
             error_message = "An unknown error occured"
             error_description = "No description available."
