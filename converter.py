@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow
+from functools import partial
 import sys
 
 def main():
@@ -8,7 +9,7 @@ def main():
         file2 = sys.argv[2]
 
         if check_extension(file1) and check_extension(file2):
-            window(file1, file2)
+            window(file1, file2, check_extension(file1), check_extension(file2))
         else:
             error_window(2)
         
@@ -22,19 +23,17 @@ def check_extension(file):
     supported = ['.xml', '.json', '.yml', '.yaml']
 
     for i in supported:
-        print(file)
-        print(i)
         if file.endswith(i):
-            return True
+            return i
     
     return False
 
 
-def clicked():
-    print("button clicked")
+def convert(file1):
+    print(file1)
 
 
-def window(file1, file2):
+def window(file1, file2, file1_extension, file2_extension):
     app = QApplication(sys.argv)
     win = QMainWindow()
     win.setGeometry(800, 400, 500, 225)
@@ -58,7 +57,7 @@ def window(file1, file2):
     b1 = QtWidgets.QPushButton(win)
     b1.move(300, 100)
     b1.setText("Convert")
-    b1.clicked.connect(clicked)
+    b1.clicked.connect(partial(convert, file1))
 
     win.show()
     sys.exit(app.exec_())
