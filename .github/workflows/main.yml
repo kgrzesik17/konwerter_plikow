@@ -35,7 +35,7 @@ jobs:
         overwrite: true
     - name: Struktura plików dla .exe
       run: |
-        mkdir -Force artefacts
+        mkdir -Force build
         $filePath = ".\build\converter.exe"
         if (Test-Path -Path $filePath){
           Remove-Item -Force $filePath
