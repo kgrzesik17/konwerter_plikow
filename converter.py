@@ -3,6 +3,9 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 from functools import partial
 import sys
 from pathlib import Path
+import json
+import xmltodict
+import yaml
 
 def main():
     try:
@@ -35,18 +38,23 @@ def check_extension(file):
     return False
 
 
-def convert(file1, file2, file1_extension, file2_extension):
-    print(f'Nastepuje proba przekonwertowania pliku {file1} na plik {file2}')
-    print(f'rozszerzenie 1: {file1_extension}, rozszerzenie 2: {file2_extension}')
+def to_dict(file1, file2, file1_extension, file2_extension):
+    try:
+        if file1_extension == 'json':
+            output = json.loads(file1.read())
+        elif file1_extension == 'xml':
+            output = xmltodict.parse(file1.read())
+        elif file1_extension == 'yml' or file1_extension == 'yaml':
+            output = yaml.load(file1.read(), Loader=yaml.SafeLoader)[0]
+    except:
+        error_window(4)
 
-    if file1_extension == ".xml":
-        pass
-
+    return output
 
 def window(file1, file2, file1_extension, file2_extension):
     app = QApplication(sys.argv)
     win = QMainWindow()
-    win.setGeometry(800, 400, 500, 225)
+    win.setGeometry(800, 400, 500, 250)
     win.setWindowTitle("File converter")
 
     label1 = QtWidgets.QLabel(win)
@@ -65,9 +73,9 @@ def window(file1, file2, file1_extension, file2_extension):
     file2_label.adjustSize()
 
     b1 = QtWidgets.QPushButton(win)
-    b1.move(300, 100)
+    b1.move(50, 200)
     b1.setText("Convert")
-    b1.clicked.connect(partial(convert, file1, file2, file1_extension, file2_extension))
+    b1.clicked.connect(partial(to_dict, file1, file2, file1_extension, file2_extension))
 
     win.show()
     sys.exit(app.exec_())
@@ -92,6 +100,10 @@ def error_window(error_id):
             error_message = "Error 3: File not found"
             error_description = "Make sure you opened the program in the right path."
             error_example = "The path should contain both files"
+        case 4:
+            error_message = "Error 4: test"
+            error_description = "Make sure you opened the program in the right path."
+            error_example = "The path should contain both files"
         case _:
             error_message = "An unknown error occured"
             error_description = "No description available."
@@ -101,7 +113,6 @@ def error_window(error_id):
     error_message_label.setText(error_message)
     error_message_label.move(50, 50)
     error_message_label.adjustSize()
-
     
     error_description_label = QtWidgets.QLabel(win)
     error_description_label.setText(error_description)
