@@ -6,16 +6,20 @@ from pathlib import Path
 import json
 import xmltodict
 import yaml
+from dict2xml import dict2xml
 
 def main():
     try:
         file1 = sys.argv[1]
         file2 = sys.argv[2]
 
-        if Path(f'./{file1}.').is_file() and Path(f'./{file2}.').is_file():
+        if Path(f'./{file1}.').is_file():
             print('ss')
         else:
             error_window(3)
+
+        if Path(f'./{file2}.').is_file():
+            error_window(5)
 
         if check_extension(file1) and check_extension(file2):
             window(file1, file2, check_extension(file1), check_extension(file2))
@@ -39,17 +43,37 @@ def check_extension(file):
 
 
 def to_dict(file1, file2, file1_extension, file2_extension):
-    try:
-        if file1_extension == 'json':
-            output = json.loads(file1.read())
-        elif file1_extension == 'xml':
-            output = xmltodict.parse(file1.read())
-        elif file1_extension == 'yml' or file1_extension == 'yaml':
-            output = yaml.load(file1.read(), Loader=yaml.SafeLoader)[0]
-    except:
-        error_window(4)
+    file = open(file1, 'r')
 
-    return output
+    if file1_extension == '.json':
+        data = json.loads(file.read())
+
+    elif file1_extension == '.xml':
+        data = xmltodict.parse(file.read())
+
+    elif file1_extension == '.yml' or file1_extension == '.yaml':
+        data = yaml.load(file, Loader=yaml.SafeLoader)
+
+    to_file(data, file2, file2_extension)
+    return False
+
+
+def to_file(data, file2, file2_extension):
+    file = open(file2, 'a')
+
+    if file2_extension == '.json':
+        content = json.dumps(data, indent=4)
+        
+    if file2_extension == '.xml':
+        content = dict2xml(data)
+
+    if file2_extension == '.yaml' or file2_extension == '.yml':
+        content = yaml.dump(data, allow_unicode=True)
+
+    file.write(content)
+    file.close()
+
+
 
 def window(file1, file2, file1_extension, file2_extension):
     app = QApplication(sys.argv)
@@ -102,6 +126,10 @@ def error_window(error_id):
             error_example = "The path should contain both files"
         case 4:
             error_message = "Error 4: test"
+            error_description = "Make sure you opened the program in the right path."
+            error_example = "The path should contain both files"
+        case 5:
+            error_message = "Error 4: File exists"
             error_description = "Make sure you opened the program in the right path."
             error_example = "The path should contain both files"
         case _:
