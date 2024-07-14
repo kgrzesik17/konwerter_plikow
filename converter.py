@@ -26,11 +26,23 @@ def window(file1, file2):
     win.setWindowTitle("File converter")
 
     label1 = QtWidgets.QLabel(win)
-    label1.setText("Hello, world!")
+    label1.setText("Welcome to my file converter!")
     label1.move(50, 50)
+    label1.adjustSize()
+
+    file1_label = QtWidgets.QLabel(win)
+    file1_label.setText(f"File found: {file1}")
+    file1_label.move(50, 100)
+    file1_label.adjustSize()
+
+    file2_label = QtWidgets.QLabel(win)
+    file2_label.setText(f"File after conversion: {file2}")
+    file2_label.move(50, 150)
+    file2_label.adjustSize()
 
     b1 = QtWidgets.QPushButton(win)
-    b1.setText("click me")
+    b1.move(300, 100)
+    b1.setText("Convert")
     b1.clicked.connect(clicked)
 
     win.show()
