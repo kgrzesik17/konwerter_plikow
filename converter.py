@@ -15,6 +15,19 @@ def main():
     return 0
 
 
+def check_extension(file):
+    supported = ['.xml', '.json', '.yml', '.yaml']
+
+    for i in supported:
+        print(file)
+        print(i)
+        if file.endswith(i):
+            return True
+    
+    return False
+
+
+
 def clicked():
     print("button clicked")
 
@@ -81,6 +94,3 @@ def error_window(error_id):
 
     win.show()
     sys.exit(app.exec_())
-
-
-main()
