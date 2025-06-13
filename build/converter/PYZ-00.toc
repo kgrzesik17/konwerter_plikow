@@ -1,4 +1,4 @@
-('D:\\a\\konwerter_plikow\\konwerter_plikow\\build\\converter\\PYZ-00.pyz',
+('C:\\a\\konwerter_plikow\\konwerter_plikow\\build\\converter\\PYZ-00.pyz',
  [('PyQt5',
    'C:\\hostedtoolcache\\windows\\Python\\3.11.9\\x64\\Lib\\site-packages\\PyQt5\\__init__.py',
    'PYMODULE'),
